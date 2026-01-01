@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: paygate
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - paygate-network
+
+  api:
+    build: .
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=paygate;Username=postgres;Password=postgres123
+      - Gateways__Bkash__BaseUrl=https://tokenized.sandbox.bka.sh/v1.2.0-beta
+      - Gateways__Bkash__AppKey=${BKASH_APP_KEY}
+      - Gateways__Bkash__AppSecret=${BKASH_APP_SECRET}
+      - Gateways__Bkash__Username=${BKASH_USERNAME}
+      - Gateways__Bkash__Password=${BKASH_PASSWORD}
+      - Gateways__Stripe__SecretKey=${STRIPE_SECRET_KEY}
+    depends_on:
+      - postgres
+    networks:
+      - paygate-network
+
+volumes:
+  postgres_data:
+
+networks:
+  paygate-network:
+    driver: bridge
