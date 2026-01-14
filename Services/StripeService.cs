@@ -40,7 +40,7 @@ public class StripeService
 
         var content = new FormUrlEncodedContent(formData);
 
-        var request = new HttpRequestMessage(HttpMethod.Post, 
+        var request = new HttpRequestMessage(HttpMethod.Post,
             "https://api.stripe.com/v1/payment_intents")
         {
             Headers = {

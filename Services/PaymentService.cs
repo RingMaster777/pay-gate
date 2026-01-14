@@ -85,7 +85,7 @@ public class PaymentService
             transaction.GatewayTransactionId = gatewayTxnId;
             await _context.SaveChangesAsync();
 
-            _logger.LogInformation("Payment initiated: {TxnId} via {Gateway}", 
+            _logger.LogInformation("Payment initiated: {TxnId} via {Gateway}",
                 transaction.TransactionId, request.Gateway);
 
             return new PaymentResponse(
@@ -105,8 +105,8 @@ public class PaymentService
     public async Task<TransactionDto?> GetTransactionAsync(string transactionId, Guid merchantId)
     {
         var transaction = await _context.Transactions
-            .FirstOrDefaultAsync(t => 
-                t.TransactionId == transactionId && 
+            .FirstOrDefaultAsync(t =>
+                t.TransactionId == transactionId &&
                 t.MerchantId == merchantId);
 
         if (transaction == null)

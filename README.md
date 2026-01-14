@@ -57,30 +57,36 @@ dotnet restore
 
 Update connection string in [appsettings.json](appsettings.json):
 
-```json
-"ConnectionStrings": {
-  "DefaultConnection": "Host=localhost;Database=paygate;Username=postgres;Password=yourpassword"
-}
+**Better approach:** Use `.env` file (industry standard):
+
+```bash
+# Copy the example file
+cp .env.example .env
+
+# Edit .env with your credentials
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=paygate
+DB_USER=postgres
+DB_PASSWORD=your_actual_password
 ```
 
 ### 3. Configure Payment Gateways
 
-Update gateway credentials in [appsettings.json](appsettings.json):
+Add your gateway credentials to `.env`:
 
-```json
-"Gateways": {
-  "Bkash": {
-    "BaseUrl": "https://tokenized.sandbox.bka.sh/v1.2.0-beta",
-    "AppKey": "your_app_key",
-    "AppSecret": "your_app_secret",
-    "Username": "your_username",
-    "Password": "your_password"
-  },
-  "Stripe": {
-    "SecretKey": "sk_test_your_stripe_key"
-  }
-}
+```bash
+# bKash Sandbox
+BKASH_APP_KEY=your_app_key
+BKASH_APP_SECRET=your_app_secret
+BKASH_USERNAME=your_username
+BKASH_PASSWORD=your_password
+
+# Stripe Test
+STRIPE_SECRET_KEY=sk_test_your_real_key
 ```
+
+**Note:** The `.env` file is gitignored and will never be committed. Safe! 🔒
 
 ### 4. Run Migrations
 
@@ -132,6 +138,7 @@ docker-compose up -d
 ```
 
 This will start:
+
 - PostgreSQL database on port 5432
 - PayGate API on port 5000
 
@@ -162,6 +169,7 @@ curl -X POST http://localhost:5000/api/payments/initiate \
 ```
 
 **Response:**
+
 ```json
 {
   "transactionId": "TXN-20260101-abc123",
@@ -178,6 +186,7 @@ curl -X GET http://localhost:5000/api/payments/TXN-20260101-abc123 \
 ```
 
 **Response:**
+
 ```json
 {
   "transactionId": "TXN-20260101-abc123",
@@ -212,16 +221,20 @@ Webhook endpoints are public (no authentication required).
 ## 📊 Database Schema
 
 ### Merchants
+
 - Stores merchant information and API keys
 
 ### Transactions
+
 - Tracks all payment transactions
 - Links to merchant and gateway
 
 ### Refunds
+
 - Records refund requests and status
 
 ### Webhook Logs
+
 - Logs all webhook events for debugging
 
 ## 🧪 Testing
@@ -249,11 +262,13 @@ Use [webhook.site](https://webhook.site) to test webhook forwarding:
 ## 📝 Development Roadmap
 
 **Phase 1: Core Features** ✅
+
 - Payment initiation
 - Webhook handling
 - Transaction tracking
 
 **Phase 2: Enhancements** (Optional)
+
 - Refund processing
 - Payment analytics dashboard
 - Multi-currency support
@@ -261,6 +276,7 @@ Use [webhook.site](https://webhook.site) to test webhook forwarding:
 - Caching with Redis
 
 **Phase 3: Advanced** (Optional)
+
 - Recurring payments
 - Payment links
 - QR code generation
@@ -283,6 +299,7 @@ MIT License - feel free to use this project for learning and portfolio purposes.
 ## 👨‍💻 Author
 
 Built as a portfolio project to demonstrate:
+
 - Payment gateway integration
 - Financial transaction handling
 - Webhook processing
@@ -299,6 +316,7 @@ Built as a portfolio project to demonstrate:
 ## 📞 Support
 
 For issues or questions:
+
 - Open an issue on GitHub
 - Check existing documentation
 - Review code comments
@@ -306,6 +324,7 @@ For issues or questions:
 ---
 
 **Note**: This is a demonstration project. For production use, add:
+
 - Enhanced security measures
 - Input validation
 - Rate limiting

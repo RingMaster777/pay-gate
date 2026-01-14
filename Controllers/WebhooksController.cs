@@ -19,7 +19,7 @@ public class WebhooksController : ControllerBase
     {
         var form = await Request.ReadFormAsync();
         var payload = form.ToDictionary(x => x.Key, x => x.Value.ToString());
-        
+
         await _webhookService.ProcessBkashWebhookAsync(payload);
         return Ok();
     }
@@ -30,7 +30,7 @@ public class WebhooksController : ControllerBase
         using var reader = new StreamReader(Request.Body);
         var body = await reader.ReadToEndAsync();
         var payload = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(body) ?? new();
-        
+
         await _webhookService.ProcessStripeWebhookAsync(payload);
         return Ok();
     }

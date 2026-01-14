@@ -52,7 +52,7 @@ public class BkashService
 
         var httpRequest = new HttpRequestMessage(HttpMethod.Post, $"{BaseUrl}/create")
         {
-            Headers = { 
+            Headers = {
                 { "Authorization", $"Bearer {token}" },
                 { "X-APP-Key", AppKey }
             },
@@ -80,7 +80,7 @@ public class BkashService
         var token = await GetTokenAsync();
         var client = _httpClientFactory.CreateClient();
 
-        var request = new HttpRequestMessage(HttpMethod.Get, 
+        var request = new HttpRequestMessage(HttpMethod.Get,
             $"{BaseUrl}/payment/status/{paymentId}")
         {
             Headers = {

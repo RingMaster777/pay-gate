@@ -19,6 +19,7 @@ Install the following:
 
 1. Install and start PostgreSQL
 2. Create database:
+
 ```sql
 CREATE DATABASE paygate;
 ```
@@ -55,28 +56,34 @@ docker run --name paygate-postgres \
 
 ## Step 4: Configure Application
 
-1. Open `appsettings.json`
-2. Update the database connection:
-```json
-"ConnectionStrings": {
-  "DefaultConnection": "Host=localhost;Database=paygate;Username=postgres;Password=postgres123"
-}
+Copy and edit the `.env` file:
+
+```bash
+# Copy the template
+cp .env.example .env
+
+# Edit .env with your real credentials
+nano .env  # or use any text editor
 ```
 
-3. Add your gateway credentials:
-```json
-"Gateways": {
-  "Bkash": {
-    "AppKey": "your_bkash_app_key",
-    "AppSecret": "your_bkash_app_secret",
-    "Username": "your_bkash_username",
-    "Password": "your_bkash_password"
-  },
-  "Stripe": {
-    "SecretKey": "sk_test_your_stripe_secret_key"
-  }
-}
+Your `.env` should look like:
+
+```bash
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=paygate
+DB_USER=postgres
+DB_PASSWORD=admin
+
+BKASH_APP_KEY=test_mock_key
+BKASH_APP_SECRET=test_mock_secret
+BKASH_USERNAME=test_user
+BKASH_PASSWORD=test_pass
+
+STRIPE_SECRET_KEY=sk_test_your_real_stripe_key
 ```
+
+**Note:** `.env` is gitignored. Your secrets are safe! 🔒
 
 ## Step 5: Run Database Migrations
 
@@ -118,6 +125,7 @@ dotnet run
 ```
 
 You should see:
+
 ```
 Now listening on: http://localhost:5000
 Now listening on: https://localhost:5001
@@ -178,7 +186,8 @@ docker-compose exec postgres psql -U postgres -d paygate
 
 **Error**: "Could not connect to database"
 
-**Solution**: 
+**Solution**:
+
 - Check PostgreSQL is running: `pg_isready`
 - Verify connection string in appsettings.json
 - Check firewall settings
@@ -188,6 +197,7 @@ docker-compose exec postgres psql -U postgres -d paygate
 **Error**: "Unable to create migration"
 
 **Solution**:
+
 ```bash
 # Clean and rebuild
 dotnet clean
@@ -200,6 +210,7 @@ dotnet ef migrations add InitialCreate --force
 **Error**: "Invalid API key"
 
 **Solution**:
+
 - Verify merchant record exists in database
 - Check `is_active` is true
 - Ensure exact match of API key
@@ -209,9 +220,10 @@ dotnet ef migrations add InitialCreate --force
 **Error**: Gateway authentication failed
 
 **Solution**:
+
 - Verify credentials in appsettings.json
 - For bKash: Ensure using sandbox URL and sandbox credentials
-- For Stripe: Ensure using test key (sk_test_...)
+- For Stripe: Ensure using test key (sk*test*...)
 - Check gateway service is not blocked by firewall
 
 ## Testing Webhooks Locally

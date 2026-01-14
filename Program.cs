@@ -3,8 +3,15 @@ using PayGate.Middleware;
 using PayGate.Services;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using DotNetEnv;
+
+// Load environment variables from .env file (industry standard)
+Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Override configuration with environment variables
+builder.Configuration.AddEnvironmentVariables();
 
 // Serilog
 Log.Logger = new LoggerConfiguration()

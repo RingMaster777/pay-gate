@@ -29,7 +29,7 @@ public class PaymentsController : ControllerBase
     {
         var merchantId = (Guid)HttpContext.Items["MerchantId"]!;
         var transaction = await _paymentService.GetTransactionAsync(transactionId, merchantId);
-        
+
         if (transaction == null)
             return NotFound();
 

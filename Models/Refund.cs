@@ -10,6 +10,6 @@ public class Refund
     public string Status { get; set; } = string.Empty;
     public string? Reason { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    
+
     public Transaction Transaction { get; set; } = null!;
 }
